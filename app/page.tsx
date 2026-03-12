@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchHabitos, toggleHabit } from "@/store/slices/habitosSlice";
+import { fetchHabitos, toggleHabitLocal } from "@/store/slices/habitosSlice";
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -83,7 +83,7 @@ export default function Home() {
               className="bg-[#262626] rounded-xl p-4 flex items-center gap-4"
             >
               <button
-                onClick={() => dispatch(toggleHabit(habito._id))}
+                onClick={() => dispatch(toggleHabitLocal(habito._id))}
                 className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
                   habito.completado
                     ? "bg-green-500 border-green-500"

@@ -27,6 +27,14 @@ export const fetchHabitos = createAsyncThunk(
   }
 );
 
+export const toggleHabit = createAsyncThunk(
+  "habitos/toggleHabit",
+  async (habitoId: string) => {
+    const response = await axios.patch(`http://localhost:3000/api/habitos/${habitoId}/toggle`);
+    return response.data;
+  }
+);
+
 const habitosSlice = createSlice({
   name: "habitos",
   initialState,
@@ -42,6 +50,12 @@ const habitosSlice = createSlice({
       })
       .addCase(fetchHabitos.rejected, (state) => {
         state.loading = false;
+      })
+      .addCase(toggleHabit.fulfilled, (state, action) => {
+        const index = state.habitos.findIndex((h) => h._id === action.payload._id);
+        if (index !== -1) {
+          state.habitos[index] = action.payload;
+        }
       });
   },
 });

@@ -4,6 +4,9 @@ import axios from "axios";
 interface Habito {
   _id: string;
   nombre: string;
+  descripcion: string;
+  completado: boolean;
+  racha: number;
 }
 
 interface HabitosState {

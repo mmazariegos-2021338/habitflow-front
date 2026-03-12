@@ -15,7 +15,12 @@ interface HabitosState {
 }
 
 const initialState: HabitosState = {
-  habitos: [],
+  habitos: [
+    { _id: "1", nombre: "Hacer ejercicio", descripcion: "30 minutos de cardio", completado: false, racha: 5 },
+    { _id: "2", nombre: "Leer", descripcion: "20 páginas diarias", completado: true, racha: 12 },
+    { _id: "3", nombre: "Meditar", descripcion: "10 minutos cada mañana", completado: false, racha: 3 },
+    { _id: "4", nombre: "Beber agua", descripcion: "2 litros al día", completado: true, racha: 8 },
+  ],
   loading: false,
 };
 
@@ -38,7 +43,14 @@ export const toggleHabit = createAsyncThunk(
 const habitosSlice = createSlice({
   name: "habitos",
   initialState,
-  reducers: {},
+  reducers: {
+    toggleHabitLocal: (state, action) => {
+      const habito = state.habitos.find((h) => h._id === action.payload);
+      if (habito) {
+        habito.completado = !habito.completado;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchHabitos.pending, (state) => {
@@ -50,14 +62,10 @@ const habitosSlice = createSlice({
       })
       .addCase(fetchHabitos.rejected, (state) => {
         state.loading = false;
-      })
-      .addCase(toggleHabit.fulfilled, (state, action) => {
-        const index = state.habitos.findIndex((h) => h._id === action.payload._id);
-        if (index !== -1) {
-          state.habitos[index] = action.payload;
-        }
       });
   },
 });
+
+export const { toggleHabitLocal } = habitosSlice.actions;
 
 export default habitosSlice.reducer;

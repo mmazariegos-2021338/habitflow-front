@@ -1,20 +1,32 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchHabitos, toggleHabit, createHabit, deleteHabit } from "@/store/slices/habitosSlice";
+import { logout } from "@/store/slices/authSlice";
 
 export default function Home() {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { habitos, loading } = useAppSelector((state) => state.habitos);
+  const { isAuthenticated, usuario } = useAppSelector((state) => state.auth);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<"all" | "pendiente" | "completado">("all");
   const [showAddModal, setShowAddModal] = useState(false);
   const [newHabit, setNewHabit] = useState({ nombre: "", descripcion: "" });
 
   useEffect(() => {
-    dispatch(fetchHabitos());
-  }, [dispatch]);
+    if (!isAuthenticated) {
+      router.push("/auth");
+    }
+  }, [isAuthenticated, router]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(fetchHabitos());
+    }
+  }, [dispatch, isAuthenticated]);
 
   const filteredHabitos = habitos.filter((habito) => {
     const matchesSearch = habito.nombre.toLowerCase().includes(searchTerm.toLowerCase());
@@ -38,6 +50,11 @@ export default function Home() {
     dispatch(deleteHabit(id));
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("/auth");
+  };
+
   // Función para obtener el color de la barra de progreso según la racha
   const getProgressColor = (racha: number) => {
     const percentage = Math.min((racha / 66) * 100, 100);
@@ -47,17 +64,35 @@ export default function Home() {
     return "bg-green-500";
   };
 
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-[#1e1e1e] px-4 py-6">
       <div className="max-w-md mx-auto">
         <header className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-white">Mis Hábitos</h1>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-          >
-            + Agregar
-          </button>
+          <div>
+            <h1 className="text-2xl font-bold text-white">Mis Hábitos</h1>
+            <p className="text-sm text-gray-400">Hola, {usuario?.nombre}</p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={handleLogout}
+              className="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-2 rounded-lg transition-colors"
+              title="Cerrar sesión"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+            </button>
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+            >
+              + Agregar
+            </button>
+          </div>
         </header>
 
         <div className="mb-4">

@@ -1,7 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
-const API_URL = "http://localhost:4000/api";
+import api from "@/lib/api";
 
 interface Habito {
   _id: string;
@@ -25,7 +23,7 @@ const initialState: HabitosState = {
 export const fetchHabitos = createAsyncThunk(
   "habitos/fetchHabitos",
   async () => {
-    const response = await axios.get(`${API_URL}/habitos`);
+    const response = await api.get("/habitos");
     return response.data;
   }
 );
@@ -33,7 +31,7 @@ export const fetchHabitos = createAsyncThunk(
 export const toggleHabit = createAsyncThunk(
   "habitos/toggleHabit",
   async (habitoId: string) => {
-    const response = await axios.patch(`${API_URL}/habitos/${habitoId}/toggle`);
+    const response = await api.patch(`/habitos/${habitoId}/toggle`);
     return response.data;
   }
 );
@@ -41,7 +39,7 @@ export const toggleHabit = createAsyncThunk(
 export const createHabit = createAsyncThunk(
   "habitos/createHabit",
   async (habito: { nombre: string; descripcion: string }) => {
-    const response = await axios.post(`${API_URL}/habitos`, habito);
+    const response = await api.post("/habitos", habito);
     return response.data;
   }
 );
@@ -49,7 +47,7 @@ export const createHabit = createAsyncThunk(
 export const deleteHabit = createAsyncThunk(
   "habitos/deleteHabit",
   async (habitoId: string) => {
-    await axios.delete(`${API_URL}/habitos/${habitoId}`);
+    await api.delete(`/habitos/${habitoId}`);
     return habitoId;
   }
 );

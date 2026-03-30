@@ -1,6 +1,6 @@
 # HabitFlow - App de Hábitos
 
-![Vista previa de la app](./screenshot-semana4.png)
+![Vista previa de la app](./screenshot-semana5.png)
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 

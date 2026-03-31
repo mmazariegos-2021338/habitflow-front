@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:4000/api",
+  baseURL: "https://habitflow-snowy.vercel.app/api",
 });
 
 // Interceptor para agregar el token JWT a todas las peticiones

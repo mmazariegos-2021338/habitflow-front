@@ -60,6 +60,12 @@ const habitosSlice = createSlice({
       const habito = state.habitos.find((h) => h._id === action.payload);
       if (habito) {
         habito.completado = !habito.completado;
+        // Actualizar la racha: +1 al completar, -1 al descompletar
+        if (habito.completado) {
+          habito.racha = (habito.racha || 0) + 1;
+        } else {
+          habito.racha = Math.max((habito.racha || 1) - 1, 0);
+        }
       }
     },
   },

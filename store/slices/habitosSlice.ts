@@ -55,7 +55,14 @@ export const deleteHabit = createAsyncThunk(
 const habitosSlice = createSlice({
   name: "habitos",
   initialState,
-  reducers: {},
+  reducers: {
+    toggleHabitLocal: (state, action) => {
+      const habito = state.habitos.find((h) => h._id === action.payload);
+      if (habito) {
+        habito.completado = !habito.completado;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchHabitos.pending, (state) => {
@@ -82,5 +89,7 @@ const habitosSlice = createSlice({
       });
   },
 });
+
+export const { toggleHabitLocal } = habitosSlice.actions;
 
 export default habitosSlice.reducer;

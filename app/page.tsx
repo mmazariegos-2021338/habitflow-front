@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchHabitos, toggleHabit, createHabit, deleteHabit } from "@/store/slices/habitosSlice";
+import { fetchHabitos, toggleHabitLocal, createHabit, deleteHabit } from "@/store/slices/habitosSlice";
 import { logout } from "@/store/slices/authSlice";
 
 export default function Home() {
@@ -148,7 +148,7 @@ export default function Home() {
               >
                 <div className="flex items-center gap-4">
                   <button
-                    onClick={() => dispatch(toggleHabit(habito._id))}
+                    onClick={() => dispatch(toggleHabitLocal(habito._id))}
                     className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors flex-shrink-0 ${
                       habito.completado
                         ? "bg-green-500 border-green-500"
